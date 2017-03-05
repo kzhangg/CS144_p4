@@ -1,155 +1,147 @@
 package edu.ucla.cs.cs144;
 
 public class ItemResult {
-   private String itemId;
-   private String name;
-   private String[] categories;
-   private String currently;
-   private String buyPrice;
-   private String firstBid;
-   private String numberOfBids;
-   private Bid[] bids;
-   private String started;
-   private String ends;
-   private Location location;
-   private String country;
-   private User seller;
-   private String description;
 
-   public ItemResult() {}
-
-   public ItemResult(final String itemId, String name, String[] categories, String currently, String buyPrice, String firstBid, String numberOfBids, Bid[] bids, String started, String ends, Location location, String country, User seller, String description ) {
-      this.itemId = itemId;
-      this.name = name;
-      this.categories = categories;
-      this.currently = currently;
-      this.buyPrice = buyPrice;
-      this.firstBid = firstBid;
-      this.numberOfBids = numberOfBids;
-      this.bids = bids;
-      this.started = started;
-      this.ends = ends;
-      this.location = location;
-      this.country = country;
-      this.seller = seller;
-      this.description = description;
-
-   }
-
-   public String getItemId() {
-      return itemId;
-   }
-
-   public void setItemId(String itemId){
-   		this.itemId = itemId;
-   }
-
-   public String getName() {
-      return name;
-   }
-
-   public void setName(String name) {
-      this.name = name;
-   }
-
-   public String[] getCategories() {
-      return categories;
-   }
-
-   public void setCategories(String[] categories) {
-      this.categories = categories;
-   }
-
-   public String getCurrently() {
-      return currently;
-   }
-
-   public void setCurrently(String currently) {
-      this.currently = currently;
-   }
+    private String itemId;
+    private String name;
+    private String[] categories;
+    private String currently;
+    private String firstBid;
+    private String buyPrice;
+    private String numberOfBids;
+    private BidResult[] bids;
+    private String location;
+    private String country;
+    private String started;
+    private String ends;
+    private String longitude;
+    private String latitude;
+    private String sellerId;
+    private String sellerRating;
+    private String description;
 
 
-   public String getBuyPrice() {
-      return buyPrice;
-   }
 
-   public void setBuyPrice(String buyPrice) {
-      this.buyPrice = buyPrice;
-   }
+    public ItemResult() {}
 
-   public String getFirstBid() {
-      return firstBid;
-   }
-
-   public void setFirstBid(String firstBid) {
-      this.firstBid = firstBid;
-   }
-   
-   public String getNumberOfBids() {
-      return numberOfBids;
-   }
-
-   public void setNumberOfBids(String numberOfBids) {
-      this.numberOfBids = numberOfBids;
-   }
-
-   public Bid[] getBids() {
-      return bids;
-   }
-
-   public void setBids(Bid[] bids) {
-      this.bids = bids;
-   }
+    public ItemResult(String itemId, String name, String currently, String firstBid, String numberOfBids,
+                      String started, String ends, String sellerId, String sellerRating, String description) {
+        this.itemId = itemId;
+        this.name = name;
+        this.currently = currently;
+        this.firstBid = firstBid;
+        this.numberOfBids = numberOfBids;
+        this.started = started;
+        this.ends = ends;
+        this.sellerId = sellerId;
+        this.sellerRating = sellerRating;
+        this.description = description;
+    }
 
 
-   public String getStarted() {
-      return started;
-   }
+    public String[] getCategories() {
+        return categories;
+    }
 
-   public void setStarted(String started) {
-      this.started = started;
-   }
+    public void setCategories (String[] categories) {
+        this.categories = categories;
+    }
 
-   public String getEnds() {
-      return ends;
-   }
+    public BidResult[] getBids() {
+        return bids;
+    }
 
-   public void setEnds(String ends) {
-      this.ends = ends;
-   }
+    public void setBids(BidResult[] bids) {
+        this.bids = bids;
+    }
 
-   public Location getLocation() {
-      return location;
-   }
+    public String getItemId() {
+        return itemId;
+    }
 
-   public void setLocation(Location location) {
-      this.location = location;
-   }
+    public String getName() {
+        return name;
+    }
 
+    public String getCurrently() {
+        return currently;
+    }
 
-   public String getCountry() {
-      return country;
-   }
+    public String getFirstBid() {
+        return firstBid;
+    }
 
-   public void setCountry(String country) {
-      this.country = country;
-   }
+    public String getBuyPrice() {
+        return buyPrice;
+    }
 
-   public User getSeller() { 
-      return seller;
-   }
+    public void setBuyPrice (String buyPrice) {
+        if (buyPrice != null)
+            this.buyPrice = buyPrice;
+    }
 
-   public void setSeller(User seller) { 
-      this.seller = seller;
-   }
+    public String getNumberOfBids() {
+        return numberOfBids;
+    }
 
-   public String getDescription() {
-      return description;
-   }   
-   
-   public void setDescription(String description) {
-      this.description = description;
-   }
+    public String getLocation() {
+        return location;
+    }
 
-   
+    public void setLocation(String location){
+        this.location = location;
+    }
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country){
+        this.country = country;
+    }
+
+    public String getStarted() {
+        return started;
+    }
+
+    public String getEnds() {
+        return ends;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude){
+        if(longitude != null){
+            this.longitude = longitude;
+        }
+        else 
+            this.longitude = "";
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude){
+        if(latitude != null){
+            this.latitude = latitude;
+        }
+        else 
+            this.latitude = "";
+                
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public String getSellerRating() {
+        return sellerRating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
 }

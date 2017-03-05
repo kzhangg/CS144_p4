@@ -1,134 +1,17 @@
-/* CS144
- *
- * Parser skeleton for processing item-???.xml files. Must be compiled in
- * JDK 1.5 or above.
- *
- * Instructions:
- *
- * This program processes all files passed on the command line (to parse
- * an entire diectory, type "java MyParser myFiles/*.xml" at the shell).
- *
- * At the point noted below, an individual XML file has been parsed into a
- * DOM Document node. You should fill in code to process the node. Java's
- * interface for the Document Object Model (DOM) is in package
- * org.w3c.dom. The documentation is available online at
- *
- * http://java.sun.com/j2se/1.5.0/docs/api/index.html
- *
- * A tutorial of Java's XML Parsing can be found at:
- *
- * http://java.sun.com/webservices/jaxp/
- *
- * Some auxiliary methods have been written for you. You may find them
- * useful.
- */
-
-
-
-/*---------------------*/
-/* HIGH LEVEL OVERVIEW */
-/*---------------------*/
-
-/*---------------------------------------*/
-//  main() -> processFile() -> parseItem()
-/*---------------------------------------*/
-
-
-// main(args)
-// {
-//     for (each XML File in args)
-//     {
-//         processFile ( File )
-//         {
-//             initiate BufferedWriters for items.dat, users.dat, categories.dat, bids.dat
-//
-//             for (each Item in File )
-//             {
-//                 parseItem (Item)
-//                 {
-//                     extract data from Item using getElementByTagNameNR, getElementText, getElementTextByTagNameNR
-//                     write out item data to items.dat
-//                     write out user data to users.dat
-//                     write out category data to categories.dat
-//                     write out bid data to bids.dat
-//                 }
-//             }
-//             close BufferedWriters
-//         }
-//     }
-// }
-
-
-
 package edu.ucla.cs.cs144;
 
-import java.io.*;
-import java.text.*;
 import java.util.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.ErrorHandler;
-import java.lang.Object;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
 
-
-class MyParser {
-
-    static final String columnSeparator = "|*|";
-    static DocumentBuilder builder;
-
-    private static BufferedWriter itemWriter;
-    private static BufferedWriter userWriter;
-    private static BufferedWriter categoryWriter;
-    private static BufferedWriter bidWriter;
-
-    static final String[] typeName = {
-    "none",
-    "Element",
-    "Attr",
-    "Text",
-    "CDATA",
-    "EntityRef",
-    "Entity",
-    "ProcInstr",
-    "Comment",
-    "Document",
-    "DocType",
-    "DocFragment",
-    "Notation",
-    };
-
-    static class MyErrorHandler implements ErrorHandler {
-
-        public void warning(SAXParseException exception)
-        throws SAXException {
-            fatalError(exception);
-        }
-
-        public void error(SAXParseException exception)
-        throws SAXException {
-            fatalError(exception);
-        }
-
-        public void fatalError(SAXParseException exception)
-        throws SAXException {
-            exception.printStackTrace();
-            System.out.println("There should be no errors " +
-                               "in the supplied XML files.");
-            System.exit(3);
-        }
-
-    }
+public class MyParser {
 
     /* Non-recursive (NR) version of Node.getElementsByTagName(...)
-     */
+ */
     static Element[] getElementsByTagNameNR(Element e, String tagName) {
         Vector< Element > elements = new Vector< Element >();
         Node child = e.getFirstChild();
@@ -181,62 +64,91 @@ class MyParser {
             return "";
     }
 
-    /* Returns the amount (in XXXXX.xx format) denoted by a money-string
-     * like $3,453.23. Returns the input if the input is an empty string.
-     */
-    static String strip(String money) {
-        if (money.equals(""))
-            return money;
-        else {
-            double am = 0.0;
-            NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
-            try { am = nf.parse(money).doubleValue(); }
-            catch (ParseException e) {
-                System.out.println("This method should work for all " +
-                                   "money values you find in our data.");
-                System.exit(20);
-            }
-            nf.setGroupingUsed(false);
-            return nf.format(am).substring(1);
+    static String date(String str) {
+        SimpleDateFormat forward = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+        SimpleDateFormat backward = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String reverse = "";
+        try {
+            Date original = forward.parse(str);
+            reverse = backward.format(original);
+        } catch (ParseException e) {
+            System.out.println("ERROR: Cannot parse \"" + str + "\"");
         }
+        return reverse;
     }
 
-    /* Converts date to yyyy-MM-dd format */
+//start here
+    static ItemResult convertToItem(Element item) throws Exception {
+        Node n = item.getAttributes().getNamedItem("ItemID");
 
-    static String convertDate(String s){
+        String itemId = n.getNodeValue();
+        String name = getElementTextByTagNameNR(item, "Name");
+        String currently = getElementTextByTagNameNR(item, "Currently");
+        String firstBid = getElementTextByTagNameNR(item, "First_Bid");
+        String buyPrice = getElementTextByTagNameNR(item, "Buy_Price");
+        String numberOfBids = getElementTextByTagNameNR(item, "Number_of_Bids");
+        String location = getElementTextByTagNameNR(item, "Location");
+        String country = getElementTextByTagNameNR(item, "Country");
+        String started = date(getElementTextByTagNameNR(item, "Started"));
+        String ends = date(getElementTextByTagNameNR(item, "Ends"));
+        String longitude = getElementByTagNameNR(item, "Location").getAttribute("Longitude");
+        String latitude = getElementByTagNameNR(item, "Location").getAttribute("Latitude");
+        String sellerId = getElementByTagNameNR(item, "Seller").getAttribute("UserID");
+        String sellerRating = getElementByTagNameNR(item, "Seller").getAttribute("Rating");
+        String description = getElementTextByTagNameNR(item, "Description");
+        if (description.length() > 4000) description = description.substring(0, 4000);
 
-        String output = "";
-        String format_old = "MMM-dd-yy HH:mm:ss";
-        String format_new = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat date_transformer = new SimpleDateFormat(format_old);
+        //get categories    
+        Element[] category = getElementsByTagNameNR(item, "Category");
+        ArrayList<String> categories = new ArrayList<String>();
 
-        try{
-            Date date = date_transformer.parse(s);
-            date_transformer.applyPattern(format_new);
-            output = date_transformer.format(date);
-
+        for(int i = 0; i < category.length; i++){
+            categories.add(category[i].getTextContent());
         }
-        catch(ParseException pe){
-            System.err.println("Problem formatting date");
+        
+        //convert to array form 
+        String[] categoryFinal = new String[categories.size()];
+        categoryFinal = categories.toArray(categoryFinal);
+
+        //get bids
+
+        Element[] bids = getElementsByTagNameNR(getElementByTagNameNR(item, "Bids"), "Bid");
+        ArrayList<BidResult> bidList = new ArrayList<BidResult>();
+             
+        for(int i = 0; i < bids.length; i++){
+            String bidderId = getElementByTagNameNR(bids[i], "Bidder").getAttribute("UserID");
+            String bidderRating = getElementByTagNameNR(bids[i], "Bidder").getAttribute("Rating");
+            String bidderLocation = getElementTextByTagNameNR(getElementByTagNameNR(bids[i], "Bidder"), "Location");
+            String bidderCountry = getElementTextByTagNameNR(getElementByTagNameNR(bids[i], "Bidder"), "Country");
+            String time = date(getElementTextByTagNameNR(bids[i], "Time"));
+            String amount = getElementTextByTagNameNR(bids[i], "Amount");
+
+            BidResult b = new BidResult(bidderId, bidderRating, time, amount);
+            b.setBidderLocation(bidderLocation);
+            b.setBidderCountry(bidderCountry);
+
+            bidList.add(b);
+            
         }
-
-        return output;
-
-    }
+        
+        Collections.sort(bidList);
+        BidResult[] bidFinal = new BidResult[bidList.size()];
+        bidFinal = bidList.toArray(bidFinal);
 
 /*
-   private String[] categories;
-   private Bid[] bids;
-   private Location location;
-   private String country;
-   private User seller;
+         ItemResult(itemId, name, currently, firstBid, numberOfBids,
+                      started, ends, sellerId, sellerRating, description) 
+
 */
+        ItemResult i = new ItemResult(itemId, name, currently, firstBid, numberOfBids, started, ends, sellerId, sellerRating, description);
+        i.setBuyPrice(buyPrice);
+        i.setLocation(location);
+        i.setCountry(country);
+        i.setLongitude(latitude);
+        i.setLatitude(longitude);
+        i.setCategories(categoryFinal);
+        i.setBids(bidFinal);
 
-    public static void parseItem(Element item) throws IOException {
-           // Get all properties of current Item
-        
+        return i;
     }
-
-
-   
 }

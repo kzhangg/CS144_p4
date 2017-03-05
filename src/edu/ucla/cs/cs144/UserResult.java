@@ -1,14 +1,14 @@
 package edu.ucla.cs.cs144;
 
-public class User {
+public class UserResult {
    private String userId;
    private String rating;
-   private Location location;
+   private String location;
    private String country;
    
-   public User(){}
+   public UserResult(){}
 
-   public User(String userId,  String rating,  Location location,  String country) {
+   public UserResult(String userId,  String rating,  String location,  String country) {
       this.userId = userId;
       this.rating = rating;
       this.location = location;
@@ -23,7 +23,7 @@ public class User {
       return rating;
    }
    
-   public Location getLocation() {
+   public String getLocation() {
       return location;
    }
    
