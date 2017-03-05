@@ -14,11 +14,28 @@ public class ItemServlet extends HttpServlet implements Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
      
-    	
+		//intialize
+		ItemResult item = null;
+		String xmlData = "":
+
+    	try{
+
+    		if(request.getParameter("itemId") != null){
+    			xmlData = AuctionSearch.getXMLDataForItemId(request.getParameter("itemId"));	
+    		}
+
+            //need to write XML --> Item class parser
+            item = MyParser.parseItem(xmlData);
+
+    	}
+    	catch (Exception e){
+    		System.out.println("Save me plox.");
+    	}
 
 
 
-    //need to write .jsp file
-     request.getRequestDispatcher("/item.jsp").forward(request, response);   
+    	request.setAttribute("item", item);
+    	//need to write .jsp file
+     	request.getRequestDispatcher("/item.jsp").forward(request, response);   
     }
 }

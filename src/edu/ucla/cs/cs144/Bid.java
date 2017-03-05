@@ -1,0 +1,27 @@
+package edu.ucla.cs.cs144;
+
+public class Bid {
+   private User bidder;
+   private String rating;
+   private String time;
+   private String amount;
+
+   public BidResult() {}
+   
+   public Bid( User bidder, String time,  String amount) {
+      this.bidder = bidder;
+      this.time = time;
+      this.amount = amount;   }
+   
+   public String getBidder() {
+      return bidder;
+   }
+   
+   public String getTime() {
+      return time;
+   }
+
+   public String getAmount() {
+      return amount;
+   } 
+}
