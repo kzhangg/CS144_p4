@@ -98,15 +98,15 @@ public class MyParser {
         String description = getElementTextByTagNameNR(item, "Description");
         if (description.length() > 4000) description = description.substring(0, 4000);
 
-        //get categories    
+        //get categories
         Element[] category = getElementsByTagNameNR(item, "Category");
         ArrayList<String> categories = new ArrayList<String>();
 
         for(int i = 0; i < category.length; i++){
             categories.add(category[i].getTextContent());
         }
-        
-        //convert to array form 
+
+        //convert to array form
         String[] categoryFinal = new String[categories.size()];
         categoryFinal = categories.toArray(categoryFinal);
 
@@ -114,7 +114,7 @@ public class MyParser {
 
         Element[] bids = getElementsByTagNameNR(getElementByTagNameNR(item, "Bids"), "Bid");
         ArrayList<BidResult> bidList = new ArrayList<BidResult>();
-             
+
         for(int i = 0; i < bids.length; i++){
             String bidderId = getElementByTagNameNR(bids[i], "Bidder").getAttribute("UserID");
             String bidderRating = getElementByTagNameNR(bids[i], "Bidder").getAttribute("Rating");
@@ -128,24 +128,24 @@ public class MyParser {
             b.setBidderCountry(bidderCountry);
 
             bidList.add(b);
-            
+
         }
-        
+
         Collections.sort(bidList);
         BidResult[] bidFinal = new BidResult[bidList.size()];
         bidFinal = bidList.toArray(bidFinal);
 
 /*
          ItemResult(itemId, name, currently, firstBid, numberOfBids,
-                      started, ends, sellerId, sellerRating, description) 
+                      started, ends, sellerId, sellerRating, description)
 
 */
         ItemResult i = new ItemResult(itemId, name, currently, firstBid, numberOfBids, started, ends, sellerId, sellerRating, description);
         i.setBuyPrice(buyPrice);
         i.setLocation(location);
         i.setCountry(country);
-        i.setLongitude(latitude);
-        i.setLatitude(longitude);
+        i.setLongitude(longitude);
+        i.setLatitude(latitude);
         i.setCategories(categoryFinal);
         i.setBids(bidFinal);
 

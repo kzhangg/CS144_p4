@@ -115,7 +115,7 @@ public class ItemResult {
         if(longitude != null){
             this.longitude = longitude;
         }
-        else 
+        else
             this.longitude = "";
     }
 
@@ -127,9 +127,9 @@ public class ItemResult {
         if(latitude != null){
             this.latitude = latitude;
         }
-        else 
+        else
             this.latitude = "";
-                
+
     }
 
     public String getSellerId() {

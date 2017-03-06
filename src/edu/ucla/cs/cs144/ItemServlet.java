@@ -41,24 +41,24 @@ public class ItemServlet extends HttpServlet implements Servlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-    
-        ItemResult item = null;
-        
+
+
         try{
+            ItemResult item = null;
             String xmlData = AuctionSearch.getXMLDataForItemId(request.getParameter("id"));
             request.setAttribute("xml", xmlData);
-         
+
             if(xmlData !="" && xmlData != null){
             Document d = convertToDocument(xmlData);
             Element x = d.getDocumentElement();
             item = MyParser.convertToItem(x);
-            }    
+            }
+            request.setAttribute("Item", item);
+            request.getRequestDispatcher("item.jsp").forward(request, response);
         }
         catch(Exception e){
+          response.sendRedirect("itemSearch.html");
         }
-        
-        request.setAttribute("Item", item);
-        request.getRequestDispatcher("/item.jsp").forward(request, response);
 
     }
 

@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SearchServlet extends HttpServlet implements Servlet {
-       
+
     public SearchServlet() {}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        try{     
+        try{
     	//default values to set in case parameters don't return a valid number
         int defaultResultsToSkip = 0;
         int defaultResultsToReturn = 30;
@@ -28,16 +28,13 @@ public class SearchServlet extends HttpServlet implements Servlet {
         if (request.getParameter("q") != null){
         	query = request.getParameter("q");
         }
-        if (request.getParameter("q") == ""){
-            response.sendRedirect("keywordSearch.html");
-        }
 
-        if (request.getParameter("numResultsToSkip") != null){
+       if (request.getParameter("numResultsToSkip") != null){
         	numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
         }
-        if (request.getParameter("numResultsToReturn") != null){
+       if (request.getParameter("numResultsToReturn") != null){
         	numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
-        }
+       }
 
         //check for invalid numbers, set to default if negative number
         if(numResultsToSkip < 0){
@@ -48,17 +45,14 @@ public class SearchServlet extends HttpServlet implements Servlet {
         }
 
         searchResults = AuctionSearch.basicSearch(query, numResultsToSkip, numResultsToReturn);
-
+        
         request.setAttribute("searchResults", searchResults);
-        request.setAttribute("query", query);
-        request.setAttribute("numResultsToSkip", numResultsToSkip);
-        request.setAttribute("numResultsToReturn", numResultsToReturn);
-      
+
       //need to write searchResults.jsp
-        request.getRequestDispatcher("/search.jsp").forward(request, response);
+        request.getRequestDispatcher("search.jsp").forward(request, response);
         }
         catch(Exception e){
-            System.out.println("Save me plox.");
+            response.sendRedirect("keywordSearch.html");
         }
     }
 }
